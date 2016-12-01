@@ -18,20 +18,20 @@ class Ship:
     """
 
 
-    def __init__(self, name, size, coords, direction):
+    def __init__(self, name, size, coords, orientation):
         """
         Initialize Ship with name, size, coordinates and direction.
         """
         self.name = name
         self.size = size
         self.coords = coords
-        self.direction = direction
+        self.orientation = orientation
         # List[str]: coordinates of ship that has been "hit"
         self.hits = []
         # Boolean: Has this ship sunk (all coords as "hit")
         self.sunk = False
         # str: display character
-        if direction.lower() == 'v':
+        if orientation.lower() == 'v':
             self.char = VERTICAL_SHIP
         else:
             self.char = HORIZONTAL_SHIP

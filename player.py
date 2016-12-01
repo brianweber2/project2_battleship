@@ -18,12 +18,8 @@ class Player(object):
         self.guesses = []
 
 
-    def prompt_user_to_place_ships(self):
-        pass
+    def add_ship(self, ship):
+        """Adds ship to list on player's instance."""
+        self.ships.append(ship)
 
 
-    def validate_player_input(self, ship, player_input):
-        """
-        Function validates player input for ship location.
-        """
-        pass
