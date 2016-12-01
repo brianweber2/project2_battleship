@@ -1,7 +1,7 @@
-from constants import VERTICAL_SHIP, HORIZONTAL_SHIP
+from constants import VERTICAL_SHIP, HORIZONTAL_SHIP, SUNK, HIT, MISS
 
 
-class Ship:
+class Ship(object):
     """
     Ship with name, size, coordinates, and hits.
 
@@ -28,6 +28,8 @@ class Ship:
         self.orientation = orientation
         # List[str]: coordinates of ship that has been "hit"
         self.hits = []
+        # List[str]: coordinates that are a "miss"
+        self.misses = []
         # Boolean: Has this ship sunk (all coords as "hit")
         self.sunk = False
         # str: display character
@@ -37,5 +39,38 @@ class Ship:
             self.char = HORIZONTAL_SHIP
 
 
-    def hit(self, coord):
-        pass
+    def hit_or_miss(self, coord):
+        """Apply a hit to a ship."""
+        if coord.upper() in self.coords:
+            self.hits.append(coord)
+            if len(self.hits) == self.size:
+                self.sunk = True
+                self.char = SUNK
+                return SUNK
+            else:
+                return HIT
+        self.misses.append(coord)
+        return MISS
+
+
+    def get_player_state(self, coord):
+        """Get player state; return SUNK, HIT, or ship character."""
+        if self.sunk:
+            return SUNK
+        elif coord in self.hits:
+            return HIT
+        else:
+            return self.char
+
+
+    def get_opp_state(self, coord):
+        """
+        Get opponent state; return SUNK, HIT, or EMPTY without giving away
+        location.
+        """
+        if self.sunk:
+            return SUNK
+        elif coord in self.hits:
+            return HIT
+        else:
+            return EMPTY

@@ -29,7 +29,7 @@ def validate_coord(coord, board_size=BOARD_SIZE):
     # Attempt to convert between characters and numbers for letter part.
     # Check to make sure the row number is in fact an integer.
     try:
-        ship_row = int(coord[1])
+        ship_row = int(coord[1:])
         ship_col = ord(coord[0])
     except (ValueError, TypeError):
         return False

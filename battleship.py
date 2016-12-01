@@ -39,6 +39,20 @@ def print_board(player_name, player_view):
     print_legend() # Print legend for board; from utils.py
 
 
+def print_all_boards(player, opponent, player_view, opp_view):
+    """
+    Display player and opponent boards to screen that shows current state
+    of game.
+    """
+    print("\n{}'s board (current player)\n".format(player.name))
+    for line in player_view:
+        print(" {}".format(line))
+    print("\n{}'s board (your opponent)\n".format(opponent.name))
+    for line in opp_view:
+        print(" {}".format(line))
+    print_legend()
+
+
 def create_ship_coords(starting_coord, ship_size, orientation):
     """Create ship coordinates based on starting position.
     
@@ -62,8 +76,8 @@ def create_ship_coords(starting_coord, ship_size, orientation):
     if validate_coord(coords[0]) and validate_coord(coords[-1]):
         return coords
     else:
-        print("ERROR: Not all coordinates are on the board!")
-        print("Here are the calculated coordinates: {}".format(coords))
+        print("\nERROR: Not all coordinates are on the board!")
+        print("Here are the calculated coordinates: {}\n".format(coords))
         return []
 
 
@@ -88,12 +102,11 @@ def define_player_ships(player):
             # Validate ship placement and generate ship coordinates
             coords = create_ship_coords(starting_coord, ship_size, orientation)
             if not coords:
-                print("ERROR: Ship coordinates not all on the board!")
                 continue
             # Validate that this ship does not collide with another one already
             # on the board
             if not player.board.verify_no_ship_collision(coords):
-                print("ERROR: Ship coordinates collide with other ships! "
+                print("\nERROR: Ship coordinates collide with other ships! "
                       "Please try again.\n")
                 continue
             # If code reaches here then the ship placement is valid
@@ -146,6 +159,30 @@ def get_ship_starting_coord(player, ship_name, ship_size):
             print("Choose {} location ({} spaces): \n".format(ship_name, ship_size))
 
 
+def take_turn(player, opponent):
+    """Allow the player to take a turn guessing the opponent's ship locations."""
+    clear_screen()
+    input("It is {}'s turn. Press ENTER to continue...".format(player.name))
+
+    # Print board that shows where current player has guessed so far.
+    clear_screen()
+    print("{}'s turn: ".format(player.name))
+    player_view = opponent.board.get_player_view(opponent.ships)
+    opp_view = player.board.get_opp_view(player.ships)
+
+    # Print both boards with name labels
+    print_all_boards(player, opponent, player_view, opp_view)
+
+    # Prompt player for guess and remember guess
+    # guess = get_player_guess(player)
+    # player.guesses.append(guess)
+
+    # Check the guess against the opponent's board
+    # result = opponent.board.guess(guess)
+
+
+
+
 def main():
     """Runs the Battleship game."""
     clear_screen()
@@ -158,14 +195,23 @@ def main():
     player2 = Player(name2)
 
     input("\nNow we will add your ships. {} goes first while {} cannot"
-          " see the monitor.\n\nPress any key to continue".format(name1, name2))
+          " see the monitor.\n\nPress ENTER to continue..."
+          "".format(name1, name2))
 
     ##### PLACING SHIPS #####
     # Define player1's ships and locations
     define_player_ships(player1)
     # Define player2's ships and locations
+    input("It is now {}'s turn to add their ships. Press ENTER to continue..."
+        "".format(name2))
     define_player_ships(player2)
 
+    ##### GAME PLAY #####
+    input("Time to begin the game! {} will go first. Press ENTER to continue..."
+        "".format(name1))
+    winner_declared = False
+    while not winner_declared:
+        take_turn(player1, player2)
 
 
 if __name__ == '__main__':
