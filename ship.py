@@ -1,32 +1,41 @@
+from constants import VERTICAL_SHIP, HORIZONTAL_SHIP
+
+
 class Ship:
-    '''
-    Everything to do with the ship itself
+    """
+    Ship with name, size, coordinates, and hits.
 
-    Knows how to mark himself or piece of him as a hit.
-    Knows how to turn into a destroyed ship.
-    Knows how to return his size/dimensions.
-    '''
-    SHIP_INFO = [
-        ("Aircraft Carrier", 5),
-        ("Battleship", 4),
-        ("Submarine", 3),
-        ("Cruiser", 3),
-        ("Patrol Boat", 2)
-    ]
+    Args:
+        name (str): Name of the ship
+        size (int): ship size in board spaces
+        coords (list[str]): list of ship board coords
+        direction (str): ship direction vertical or horizontal
 
-    def __init__(self):
-        self.ship_info = self.SHIP_INFO
+    Attributes:
+        hits (list[str]): coords "hit" by guess
+        sunk (boolean): all coords "hit"
+        char (str): display charater "|" vertical or "-" horizontal
+    """
 
 
-    def return_ship_size(self, ship_name):
-        for ship in self.ship_info:
-            if ship[0] == ship_name:
-                return ship[1]
+    def __init__(self, name, size, coords, direction):
+        """
+        Initialize Ship with name, size, coordinates and direction.
+        """
+        self.name = name
+        self.size = size
+        self.coords = coords
+        self.direction = direction
+        # List[str]: coordinates of ship that has been "hit"
+        self.hits = []
+        # Boolean: Has this ship sunk (all coords as "hit")
+        self.sunk = False
+        # str: display character
+        if direction.lower() == 'v':
+            self.char = VERTICAL_SHIP
+        else:
+            self.char = HORIZONTAL_SHIP
 
 
-    def ship_destoyed(self):
-        pass
-
-
-    def hit_or_miss(self):
+    def hit(self, coord):
         pass

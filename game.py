@@ -1,7 +1,5 @@
 from battleship import clear_screen
 from player import Player
-from board import Board
-from ship import Ship
 
 
 class Game:
@@ -16,19 +14,16 @@ class Game:
         clear_screen()
         self.player1 = Player(input("Player 1's name: "))
         self.player2 = Player(input("Player 2's name: "))
-        self.ship1 = Ship()
-        self.ship2 = Ship()
 
 
     def __init__(self):
         # Prompt the players for their names
         self.setup()
-        # Display an empty board for Player 1
+        # Display an empty board for player1
         clear_screen()
         self.player1.print_board()
-        # Prompt user to place a ship and validate user input
-        player1_choices = self.player1.prompt_user_to_place_ship(self.player1.ship_info)
-        print(player1_choices)
+        # Prompt player1 to place a ship. Validate player1 input and ship placement
+        self.player1.prompt_user_to_place_ships(self.player1.ship_info)
 
 
 
