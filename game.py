@@ -1,24 +1,9 @@
 from constants import (BOARD_SIZE, VERTICAL_SHIP, HORIZONTAL_SHIP, EMPTY,
                        MISS, HIT, SUNK, SHIP_INFO)
-import os
+from utils import clear_screen
 
 from player import Player
 from ship import Ship
-
-
-def clear_screen():
-    """Clear screen by sending command to OS."""
-    os.system('cls' if os.name == 'nt' else 'clear')
-
-
-def coord_to_number(coord):
-    """Converts the string version of a ship coordinate, i.e. 'A2', to a number
-    for a row and column. Note the conversion is based on a 0-based row and 
-    column offset.
-    """
-    row = int(coord[1:]) - 1
-    col = ord(coord[0]) - ord('A')
-    return row, col
 
 
 class Game(object):
@@ -57,12 +42,22 @@ class Game(object):
         while not winner_declared:
             self.take_turn(player1, player2)
             if not player2.ships_left():
-                print("{} wins!!!".format(player1.name))
+                print("{} wins!!!\n".format(player1.name))
+                player_view = player1.board.get_opp_view(player1.ships)
+                opp_view = player2.board.get_opp_view(player2.ships)
+                # Print both boards with name labels
+                self.print_all_boards(player1, player2, player_view, opp_view)
                 winner_declared = True
+                break
             self.take_turn(player2, player1)
             if not player1.ships_left():
                 print("{} wins!!!".format(player2.name))
+                player_view = player2.board.get_opp_view(player2.ships)
+                opp_view = player1.board.get_opp_view(player1.ships)
+                # Print both boards with name labels
+                self.print_all_boards(player2, player1, player_view, opp_view)
                 winner_declared = True
+                break
 
 
     def ask_player_name(self, order):
@@ -236,7 +231,7 @@ class Game(object):
         self.print_all_boards(player, opponent, player_view, opp_view)
 
         # Prompt player for guess and remember guess
-        coord = self.get_player_guess(player)
+        coord = self.get_player_guess(player, opponent)
         player.guesses.append(coord)
 
         # Check the guess against the opponent's board
@@ -244,7 +239,8 @@ class Game(object):
         # Update opponent's board for player's view
         clear_screen()
         print(result)
-        input("\nHit ENTER to continue...")
+        input("\nHit ENTER to continue...\n")
+        clear_screen()
 
 
     def print_all_boards(self, player, opponent, player_view, opp_view):
@@ -261,21 +257,32 @@ class Game(object):
         self.print_legend()
 
 
-    def get_player_guess(self, player):
+    def get_player_guess(self, player, opponent):
         """Prompt player for guess."""
         while True:
             user_input = input("\n{}, enter a location: ".format(player.name)).strip()
             guess = user_input.upper()
             # Validate guess
             if guess in player.guesses:
+                clear_screen()
                 print("\nERROR: {} has already been guessed! Please try again."
                     "".format(guess))
                 print("Here are the guesses you have made so far: " + 
                     ", ".join(player.guesses))
+                player_view = opponent.board.get_player_view(opponent.ships)
+                opp_view = player.board.get_opp_view(player.ships)
+                # Print both boards with name labels
+                self.print_all_boards(player, opponent, player_view, opp_view)
             elif self.validate_coord(guess):
                 return guess
             else:
+                clear_screen()
                 print("\nERROR: {} is not a valid guess. Please enter the LETTER"
                     " and NUMBER as one word. Spaces before or after input, and "
                     "both upper and lowercase characters are allowed.".format(
                         guess))
+                player_view = opponent.board.get_player_view(opponent.ships)
+                opp_view = player.board.get_opp_view(player.ships)
+
+                # Print both boards with name labels
+                self.print_all_boards(player, opponent, player_view, opp_view)

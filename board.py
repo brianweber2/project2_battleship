@@ -1,6 +1,7 @@
 from constants import (BOARD_HEADING, BOARD_SIZE, VERTICAL_SHIP, 
                        HORIZONTAL_SHIP, EMPTY, MISS, HIT, SUNK)
-from game import coord_to_number
+
+from utils import coord_to_number
 
 
 class Board(object):
