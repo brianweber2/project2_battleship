@@ -25,4 +25,13 @@ class Player(object):
 
     def add_ship(self, ship):
         """Adds ship to list on player's instance."""
-        self.ships.append(ship)   
+        self.ships.append(ship)
+
+
+    def ships_left(self):
+        """Determine if the player has any ships that are not sunk."""
+        result = False
+        for ship in self.ships:
+            if not ship.sunk:
+                result = True
+        return result

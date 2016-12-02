@@ -109,6 +109,18 @@ class Board(object):
         return view
 
 
-    def guess(self, coord):
+    def guess(self, coord, ships):
         """Apply guess to board."""
-        pass
+        for ship in ships:
+            if coord in ship.coords:
+                ship.hits.append(coord)
+                if len(ship.hits) == ship.size:
+                    ship.sunk = True
+                    result = "Guess [{}]: you SUNK my {}!!\n".format(
+                        coord, ship.name)
+                else:
+                    result = "Guess [{}]: it's a HIT!\n".format(coord)
+            else:
+                ship.misses.append(coord)
+                result = "Guess [{}]: you MISSED!\n".format(coord)
+        return result

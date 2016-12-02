@@ -159,6 +159,26 @@ def get_ship_starting_coord(player, ship_name, ship_size):
             print("Choose {} location ({} spaces): \n".format(ship_name, ship_size))
 
 
+def get_player_guess(player):
+    """Prompt player for guess."""
+    while True:
+        user_input = input("\n{}, enter a location: ".format(player.name)).strip()
+        guess = user_input.upper()
+        # Validate guess
+        if guess in player.guesses:
+            print("\nERROR: {} has already been guessed! Please try again."
+                "".format(guess))
+            print("Here are the guesses you have made so far: " + 
+                ", ".join(player.guesses))
+        elif validate_coord(guess):
+            return guess
+        else:
+            print("\nERROR: {} is not a valid guess. Please enter the LETTER"
+                " and NUMBER as one word. Spaces before or after input, and "
+                "both upper and lowercase characters are allowed.".format(
+                    guess))
+
+
 def take_turn(player, opponent):
     """Allow the player to take a turn guessing the opponent's ship locations."""
     clear_screen()
@@ -174,11 +194,16 @@ def take_turn(player, opponent):
     print_all_boards(player, opponent, player_view, opp_view)
 
     # Prompt player for guess and remember guess
-    # guess = get_player_guess(player)
-    # player.guesses.append(guess)
+    coord = get_player_guess(player)
+    player.guesses.append(coord)
 
     # Check the guess against the opponent's board
-    # result = opponent.board.guess(guess)
+    result = opponent.board.guess(coord, opponent.ships)
+    # Update opponent's board for player's view
+    clear_screen()
+    print(result)
+    input("\nHit ENTER to continue...")
+
 
 
 
@@ -212,6 +237,14 @@ def main():
     winner_declared = False
     while not winner_declared:
         take_turn(player1, player2)
+        if not player2.ships_left():
+            print("{} wins!!!".format(player1.name))
+            winner_declared = True
+        take_turn(player2, player1)
+        if not player1.ships_left():
+            print("{} wins!!!".format(player2.name))
+            winner_declared = True
+
 
 
 if __name__ == '__main__':
