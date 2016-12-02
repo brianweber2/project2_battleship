@@ -1,6 +1,6 @@
 from constants import (BOARD_HEADING, BOARD_SIZE, VERTICAL_SHIP, 
                        HORIZONTAL_SHIP, EMPTY, MISS, HIT, SUNK)
-from utils import coord_to_number
+from game import coord_to_number
 
 
 class Board(object):
@@ -118,8 +118,10 @@ class Board(object):
                     ship.sunk = True
                     result = "Guess [{}]: you SUNK my {}!!\n".format(
                         coord, ship.name)
+                    break
                 else:
                     result = "Guess [{}]: it's a HIT!\n".format(coord)
+                    break
             else:
                 ship.misses.append(coord)
                 result = "Guess [{}]: you MISSED!\n".format(coord)
