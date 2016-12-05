@@ -71,10 +71,11 @@ class Board(object):
                     self.board[row][col] = SUNK
                 elif coord in ship.hits:
                     self.board[row][col] = HIT
-                elif coord in ship.misses:
-                    self.board[row][col] = MISS
                 else:
                     self.board[row][col] = EMPTY
+            for coord in ship.misses:
+                row, col = coord_to_number(coord)
+                self.board[row][col] = MISS
 
         view = [BOARD_HEADING]
         row_num = 1
@@ -97,10 +98,11 @@ class Board(object):
                     self.board[row][col] = SUNK
                 elif coord in ship.hits:
                     self.board[row][col] = HIT
-                elif coord in ship.misses:
-                    self.board[row][col] = MISS
                 else:
                     self.board[row][col] = ship.char
+            for coord in ship.misses:
+                row, col = coord_to_number(coord)
+                self.board[row][col] = MISS
 
         view = [BOARD_HEADING]
         row_num = 1
